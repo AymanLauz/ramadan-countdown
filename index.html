@@ -575,7 +575,7 @@
         const totalMs = targetDate - maghribDate;
         const elapsedMs = now - maghribDate;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of fatar elapsed`;
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of Iftar elapsed`;
         // After maghrib: left=Maghrib(done), right=next Fajr(upcoming active)
         document.getElementById('labelLeft').textContent = '🕌 Maghrib';
         document.getElementById('valLeft').textContent = todayTimes.maghrib;
@@ -653,6 +653,101 @@
     updateRamadanDays();
     // Refresh once per minute is enough
     setInterval(updateRamadanDays, 60000);
+  </script>
+
+  <!-- Cookie Consent Popup -->
+  <style>
+    #cookie-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 9999;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+    #cookie-box {
+      background: #141B24;
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(201,169,110,0.1);
+      animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    #cookie-box .cookie-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    #cookie-box h3 {
+      font-family: 'Amiri', serif;
+      color: #E8C97A;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    #cookie-box p {
+      font-size: 0.85rem;
+      color: rgba(245,236,215,0.6);
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+    .cookie-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    #cookie-accept {
+      background: linear-gradient(135deg, #1A6B5C, #1d7a69);
+      color: #F5ECD7;
+      border: none;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    #cookie-accept:hover { opacity: 0.85; }
+    #cookie-decline {
+      background: transparent;
+      color: #C9A96E;
+      border: 1px solid rgba(201,169,110,0.4);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #cookie-decline:hover { background: rgba(201,169,110,0.08); }
+  </style>
+
+  <div id="cookie-overlay" style="display:none;">
+    <div id="cookie-box">
+      <div class="cookie-icon">🍪</div>
+      <h3>Accept cookies?</h3>
+      <p>This site uses cookies to enhance your experience. Do you accept?</p>
+      <div class="cookie-btns">
+        <button id="cookie-decline">Not until Iftar ☝️</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      if (!localStorage.getItem('cookieConsent')) {
+        document.getElementById('cookie-overlay').style.display = 'flex';
+      }
+      document.getElementById('cookie-decline').onclick = function() {
+        localStorage.setItem('cookieConsent', 'declined');
+        document.getElementById('cookie-overlay').style.display = 'none';
+      };
+    })();
   </script>
 </body>
 </html>
