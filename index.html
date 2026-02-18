@@ -332,7 +332,8 @@
     }
     .ramadan-days-sublabel {
       font-size: clamp(0.62rem, 2.5vw, 0.72rem);
-      color: rgba(245,236,215,0.4);
+      color: var(--gold);
+      opacity: 0.75;
     }
     .ramadan-days-sublabel.eid { color: rgba(94,207,184,0.65); }
     .days-progress-bar-bg {
@@ -404,13 +405,13 @@
     </div>
 
     <div class="times-row">
-      <div class="time-box" id="boxFajr">
-        <div class="time-box-label">🌙 Fajr</div>
-        <div class="time-box-value" id="fajrVal">--:--</div>
+      <div class="time-box" id="boxLeft">
+        <div class="time-box-label" id="labelLeft">🌙 Fajr</div>
+        <div class="time-box-value" id="valLeft">--:--</div>
       </div>
-      <div class="time-box" id="boxMaghrib">
-        <div class="time-box-label">🕌 Maghrib</div>
-        <div class="time-box-value" id="maghribVal">--:--</div>
+      <div class="time-box" id="boxRight">
+        <div class="time-box-label" id="labelRight">🕌 Maghrib</div>
+        <div class="time-box-value" id="valRight">--:--</div>
       </div>
     </div>
 
@@ -512,9 +513,7 @@
       const fajrDate = new Date(2026, targetMonth, targetDay, ...todayTimes.fajr.split(":"));
       const maghribDate = new Date(2026, targetMonth, targetDay, ...todayTimes.maghrib.split(":"));
 
-      // Update both time boxes
-      document.getElementById('fajrVal').textContent = todayTimes.fajr;
-      document.getElementById('maghribVal').textContent = todayTimes.maghrib;
+      // time boxes updated per-phase below
 
       let targetDate, label, targetTimeDisplay, isFasting;
       
@@ -532,8 +531,13 @@
         const elapsedMs = now - midnight;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
         document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of pre-Fajr period elapsed`;
-        document.getElementById('boxFajr').classList.add('active');
-        document.getElementById('boxMaghrib').classList.remove('active');
+        // Before fajr: left=Maghrib(last), right=Fajr(upcoming active)
+        document.getElementById('labelLeft').textContent = '🕌 Maghrib';
+        document.getElementById('valLeft').textContent = todayTimes.maghrib;
+        document.getElementById('labelRight').textContent = '🌙 Fajr';
+        document.getElementById('valRight').textContent = todayTimes.fajr;
+        document.getElementById('boxLeft').classList.remove('active');
+        document.getElementById('boxRight').classList.add('active');
       } else if (now < maghribDate) {
         targetDate = maghribDate;
         label = "Fasting time · Until Iftar";
@@ -543,8 +547,13 @@
         const elapsedMs = now - fajrDate;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
         document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of fast completed`;
-        document.getElementById('boxFajr').classList.remove('active');
-        document.getElementById('boxMaghrib').classList.add('active');
+        // Fasting: left=Fajr(started), right=Maghrib(ends active)
+        document.getElementById('labelLeft').textContent = '🌙 Fajr';
+        document.getElementById('valLeft').textContent = todayTimes.fajr;
+        document.getElementById('labelRight').textContent = '🕌 Maghrib';
+        document.getElementById('valRight').textContent = todayTimes.maghrib;
+        document.getElementById('boxLeft').classList.remove('active');
+        document.getElementById('boxRight').classList.add('active');
       } else {
         let nextDay = targetDay + 1;
         let nextMonth = targetMonth;
@@ -566,9 +575,14 @@
         const totalMs = targetDate - maghribDate;
         const elapsedMs = now - maghribDate;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of night elapsed`;
-        document.getElementById('boxFajr').classList.remove('active');
-        document.getElementById('boxMaghrib').classList.remove('active');
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of fatar elapsed`;
+        // After maghrib: left=Maghrib(done), right=next Fajr(upcoming active)
+        document.getElementById('labelLeft').textContent = '🕌 Maghrib';
+        document.getElementById('valLeft').textContent = todayTimes.maghrib;
+        document.getElementById('labelRight').textContent = '🌙 Fajr';
+        document.getElementById('valRight').textContent = tomorrowTimes.fajr;
+        document.getElementById('boxLeft').classList.remove('active');
+        document.getElementById('boxRight').classList.add('active');
       }
 
       // Update progress bar
@@ -602,10 +616,22 @@
 
       const msPerDay = 24 * 60 * 60 * 1000;
 
-      // Days elapsed since Ramadan started (0 on day 1, 1 on day 2, etc.)
+      // Days elapsed since Ramadan started
       const elapsed = Math.floor((today - RAMADAN_START) / msPerDay);
-      // Days fasted = days fully completed (after maghrib counts as +1, but we keep it simple: day number = elapsed+1)
-      const daysFasted  = Math.min(TOTAL_DAYS, Math.max(1, elapsed + 1));
+      // Check if maghrib has passed today — if so, count today as fasted
+      const todayKey = now.getDate();
+      const todayMonth = now.getMonth();
+      const ramadanTimesRef = {
+        1: { 18:"17:33",19:"17:34",20:"17:35",21:"17:36",22:"17:36",23:"17:37",24:"17:38",25:"17:39",26:"17:40",27:"17:40",28:"17:41" },
+        2: { 1:"17:42",2:"17:43",3:"17:44",4:"17:44",5:"17:45",6:"17:46",7:"17:47",8:"17:47",9:"17:48",10:"17:49",11:"17:50",12:"17:50",13:"17:51",14:"17:52",15:"17:53",16:"17:53",17:"17:54",18:"17:55",19:"17:55",20:"17:56" }
+      };
+      let maghribPassedToday = false;
+      if (ramadanTimesRef[todayMonth] && ramadanTimesRef[todayMonth][todayKey]) {
+        const [mh, mm] = ramadanTimesRef[todayMonth][todayKey].split(':').map(Number);
+        const maghribToday = new Date(now.getFullYear(), todayMonth, todayKey, mh, mm, 0);
+        maghribPassedToday = now >= maghribToday;
+      }
+      const daysFasted  = Math.min(TOTAL_DAYS, Math.max(1, elapsed + (maghribPassedToday ? 1 : 0)));
       const daysToEid   = Math.max(0, Math.ceil((EID_DATE - today) / msPerDay));
       const progressPct = Math.min(100, (elapsed / TOTAL_DAYS) * 100);
 
