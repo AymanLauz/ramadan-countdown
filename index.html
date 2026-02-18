@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Ramadan 2026 Countdown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E8C97A;
+      --cream: #F5ECD7;
+      --bg: #0D1117;
+      --bg2: #141B24;
+      --accent: #1A6B5C;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Tajawal', sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Subtle geometric background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,107,92,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(201,169,110,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Crescent moon decoration */
+    .moon {
+      position: fixed;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      box-shadow: -30px 30px 0 10px rgba(201,169,110,0.08);
+      border: 1px solid rgba(201,169,110,0.1);
+      pointer-events: none;
+    }
+
+    /* Stars */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    .star {
+      position: absolute;
+      background: var(--gold-light);
+      border-radius: 50%;
+      animation: twinkle var(--d, 3s) ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.3); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .ramadan-title {
+      font-family: 'Amiri', serif;
+      font-size: clamp(2rem, 8vw, 2.8rem);
+      color: var(--gold-light);
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .ramadan-subtitle {
+      font-size: clamp(0.75rem, 3vw, 0.9rem);
+      color: rgba(245,236,215,0.5);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    /* Date card */
+    .date-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 16px;
+      padding: 0.8rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+    }
+    .day-name {
+      font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+      font-weight: 700;
+      color: var(--cream);
+    }
+    .date-display {
+      font-size: clamp(0.85rem, 3.5vw, 1rem);
+      color: rgba(245,236,215,0.55);
+      letter-spacing: 0.08em;
+    }
+
+    /* Divider */
+    .ornament {
+      color: var(--gold);
+      font-size: 1.1rem;
+      opacity: 0.6;
+      letter-spacing: 0.4em;
+    }
+
+    /* Status pill */
+    .status-pill {
+      background: linear-gradient(135deg, rgba(26,107,92,0.3), rgba(26,107,92,0.1));
+      border: 1px solid rgba(26,107,92,0.5);
+      border-radius: 100px;
+      padding: 0.4rem 1.4rem;
+      font-size: clamp(0.8rem, 3.2vw, 0.95rem);
+      color: #5ECFB8;
+      letter-spacing: 0.05em;
+      font-weight: 400;
+      transition: all 0.5s ease;
+    }
+
+    /* Countdown block */
+    .countdown-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .countdown {
+      font-family: 'Amiri', serif;
+      font-size: clamp(4.5rem, 18vw, 6.5rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold) 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      /* Subtle pulse */
+      animation: pulse 1s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+    .time-labels {
+      display: flex;
+      gap: 0;
+      width: 100%;
+      justify-content: center;
+    }
+    .time-label {
+      flex: 1;
+      font-size: clamp(0.6rem, 2.5vw, 0.7rem);
+      color: rgba(245,236,215,0.35);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* Target time */
+    .target-time {
+      font-size: clamp(0.8rem, 3vw, 0.9rem);
+      color: rgba(245,236,215,0.4);
+    }
+    .target-time span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* Progress bar */
+    .progress-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      border-radius: 100px;
+      transition: width 1s linear;
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: clamp(0.65rem, 2.5vw, 0.75rem);
+      color: rgba(245,236,215,0.3);
+    }
+    .progress-labels span:last-child { color: var(--gold); opacity: 0.7; }
+
+    /* Both times row */
+    .times-row {
+      display: flex;
+      gap: 0.8rem;
+      width: 100%;
+    }
+    .time-box {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,169,110,0.12);
+      border-radius: 14px;
+      padding: 0.9rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .time-box-label {
+      font-size: clamp(0.6rem, 2.5vw, 0.72rem);
+      color: rgba(245,236,215,0.35);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .time-box-value {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1.3rem, 5.5vw, 1.7rem);
+      font-weight: 700;
+      color: var(--cream);
+    }
+    .time-box.active {
+      border-color: rgba(26,107,92,0.5);
+      background: rgba(26,107,92,0.08);
+    }
+    .time-box.active .time-box-label { color: #5ECFB8; }
+    .time-box.active .time-box-value { color: var(--gold-light); }
+
+    /* Ramadan days section */
+    .ramadan-days-section {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,169,110,0.18);
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .ramadan-days-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .ramadan-days-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    .ramadan-days-label {
+      font-size: clamp(0.58rem, 2.3vw, 0.68rem);
+      color: rgba(245,236,215,0.35);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .ramadan-days-number {
+      font-family: 'Amiri', serif;
+      font-size: clamp(2rem, 8vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(160deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ramadan-days-number.eid {
+      background: linear-gradient(160deg, #7EDDD0, #5ECFB8);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .ramadan-days-sublabel {
+      font-size: clamp(0.62rem, 2.5vw, 0.72rem);
+      color: rgba(245,236,215,0.4);
+    }
+    .ramadan-days-sublabel.eid { color: rgba(94,207,184,0.65); }
+    .days-progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .days-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold-light));
+      border-radius: 100px;
+      transition: width 0.5s ease;
+    }
+    .days-ticks {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1px;
+    }
+    .days-tick {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    .days-tick.filled {
+      background: rgba(201,169,110,0.5);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="moon"></div>
+  <div class="stars" id="stars"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="ramadan-title">رمضان ٢٠٢٦</div>
+      <div class="ramadan-subtitle">Ramadan 2026</div>
+    </div>
+
+    <div class="date-card">
+      <div class="day-name" id="dayName">--</div>
+      <div class="date-display" id="dateDisplay">--</div>
+    </div>
+
+    <div class="ornament">✦ ✦ ✦</div>
+
+    <div class="status-pill" id="statusPill">Loading...</div>
+
+    <div class="countdown-wrap">
+      <div class="countdown" id="countdown">--:--:--</div>
+      <div class="time-labels">
+        <div class="time-label">Hours</div>
+        <div class="time-label">Mins</div>
+        <div class="time-label">Secs</div>
+      </div>
+    </div>
+
+    <div class="target-time" id="targetTime"></div>
+
+    <div class="progress-section">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="progress-labels">
+        <span id="progressStart">Fajr</span>
+        <span id="progressEnd">Maghrib</span>
+      </div>
+    </div>
+
+    <div class="times-row">
+      <div class="time-box" id="boxFajr">
+        <div class="time-box-label">🌙 Fajr</div>
+        <div class="time-box-value" id="fajrVal">--:--</div>
+      </div>
+      <div class="time-box" id="boxMaghrib">
+        <div class="time-box-label">🕌 Maghrib</div>
+        <div class="time-box-value" id="maghribVal">--:--</div>
+      </div>
+    </div>
+
+    <div class="ramadan-days-section">
+      <div class="ramadan-days-top">
+        <div class="ramadan-days-stat">
+          <div class="ramadan-days-label">Days Fasted</div>
+          <div class="ramadan-days-number" id="daysFasted">--</div>
+          <div class="ramadan-days-sublabel">of 30 days</div>
+        </div>
+        <div class="ramadan-days-stat" style="align-items:flex-end">
+          <div class="ramadan-days-label">Until Bayram</div>
+          <div class="ramadan-days-number eid" id="daysToEid">--</div>
+          <div class="ramadan-days-sublabel eid">days remaining</div>
+        </div>
+      </div>
+      <div class="days-progress-bar-bg">
+        <div class="days-progress-bar-fill" id="daysProgressFill" style="width:0%"></div>
+      </div>
+      <div class="days-ticks" id="daysTicks"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Generate stars
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 30; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2.5 + 1;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%;
+        left:${Math.random()*100}%;
+        --d:${2 + Math.random()*4}s;
+        animation-delay:${Math.random()*4}s;
+      `;
+      starsEl.appendChild(s);
+    }
+
+    const ramadanTimes = {
+      1: {
+        18: { fajr: "04:57", maghrib: "17:33" },
+        19: { fajr: "04:56", maghrib: "17:34" },
+        20: { fajr: "04:55", maghrib: "17:35" },
+        21: { fajr: "04:54", maghrib: "17:36" },
+        22: { fajr: "04:53", maghrib: "17:36" },
+        23: { fajr: "04:52", maghrib: "17:37" },
+        24: { fajr: "04:51", maghrib: "17:38" },
+        25: { fajr: "04:50", maghrib: "17:39" },
+        26: { fajr: "04:49", maghrib: "17:40" },
+        27: { fajr: "04:48", maghrib: "17:40" },
+        28: { fajr: "04:46", maghrib: "17:41" }
+      },
+      2: {
+        1: { fajr: "04:46", maghrib: "17:42" },
+        2: { fajr: "04:44", maghrib: "17:43" },
+        3: { fajr: "04:43", maghrib: "17:44" },
+        4: { fajr: "04:42", maghrib: "17:44" },
+        5: { fajr: "04:41", maghrib: "17:45" },
+        6: { fajr: "04:40", maghrib: "17:46" },
+        7: { fajr: "04:38", maghrib: "17:47" },
+        8: { fajr: "04:37", maghrib: "17:47" },
+        9: { fajr: "04:36", maghrib: "17:48" },
+        10: { fajr: "04:35", maghrib: "17:49" },
+        11: { fajr: "04:34", maghrib: "17:50" },
+        12: { fajr: "04:32", maghrib: "17:50" },
+        13: { fajr: "04:31", maghrib: "17:51" },
+        14: { fajr: "04:30", maghrib: "17:52" },
+        15: { fajr: "04:28", maghrib: "17:53" },
+        16: { fajr: "04:27", maghrib: "17:53" },
+        17: { fajr: "04:26", maghrib: "17:54" },
+        18: { fajr: "04:24", maghrib: "17:55" },
+        19: { fajr: "04:23", maghrib: "17:55" },
+        20: { fajr: "04:22", maghrib: "17:56" }
+      }
+    };
+
+    function toMinutes(timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const day = now.getDate();
+
+      let targetMonth = month;
+      let targetDay = day;
+      if (year !== 2026 || !ramadanTimes[month] || !ramadanTimes[month][day]) {
+        targetMonth = 1;
+        targetDay = 18;
+      }
+
+      const todayTimes = ramadanTimes[targetMonth][targetDay];
+      const fajrDate = new Date(2026, targetMonth, targetDay, ...todayTimes.fajr.split(":"));
+      const maghribDate = new Date(2026, targetMonth, targetDay, ...todayTimes.maghrib.split(":"));
+
+      // Update both time boxes
+      document.getElementById('fajrVal').textContent = todayTimes.fajr;
+      document.getElementById('maghribVal').textContent = todayTimes.maghrib;
+
+      let targetDate, label, targetTimeDisplay, isFasting;
+      
+      // Progress bar logic
+      let progressPct = 0;
+
+      if (now < fajrDate) {
+        targetDate = fajrDate;
+        label = "Until Fast Begins · Fajr";
+        targetTimeDisplay = todayTimes.fajr;
+        isFasting = false;
+        // Progress from midnight to fajr
+        const midnight = new Date(2026, targetMonth, targetDay, 0, 0, 0);
+        const totalMs = fajrDate - midnight;
+        const elapsedMs = now - midnight;
+        progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+        document.getElementById('progressStart').textContent = 'Midnight';
+        document.getElementById('progressEnd').textContent = 'Fajr';
+        document.getElementById('boxFajr').classList.add('active');
+        document.getElementById('boxMaghrib').classList.remove('active');
+      } else if (now < maghribDate) {
+        targetDate = maghribDate;
+        label = "Fasting time · Until Iftar";
+        targetTimeDisplay = todayTimes.maghrib;
+        isFasting = true;
+        const totalMs = maghribDate - fajrDate;
+        const elapsedMs = now - fajrDate;
+        progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+        document.getElementById('progressStart').textContent = 'Fajr';
+        document.getElementById('progressEnd').textContent = 'Maghrib';
+        document.getElementById('boxFajr').classList.remove('active');
+        document.getElementById('boxMaghrib').classList.add('active');
+      } else {
+        let nextDay = targetDay + 1;
+        let nextMonth = targetMonth;
+        if (!ramadanTimes[targetMonth][nextDay]) {
+          nextDay = 1;
+          nextMonth = targetMonth + 1;
+        }
+        const tomorrowTimes = ramadanTimes[nextMonth] && ramadanTimes[nextMonth][nextDay];
+        if (!tomorrowTimes) {
+          label = "Ramadan Complete 🌙";
+          targetTimeDisplay = "";
+          document.getElementById('countdown').textContent = "✓";
+          return;
+        }
+        targetDate = new Date(2026, nextMonth, nextDay, ...tomorrowTimes.fajr.split(":"));
+        label = "Until Tomorrow's Fajr";
+        targetTimeDisplay = tomorrowTimes.fajr;
+        isFasting = false;
+        const totalMs = targetDate - maghribDate;
+        const elapsedMs = now - maghribDate;
+        progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
+        document.getElementById('progressStart').textContent = 'Maghrib';
+        document.getElementById('progressEnd').textContent = 'Fajr';
+        document.getElementById('boxFajr').classList.remove('active');
+        document.getElementById('boxMaghrib').classList.remove('active');
+      }
+
+      // Update progress bar
+      document.getElementById('progressFill').style.width = progressPct + '%';
+
+      // Update date/day display
+      const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      document.getElementById("dayName").textContent = dayNames[now.getDay()];
+      document.getElementById("dateDisplay").textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+      document.getElementById("statusPill").textContent = label;
+      document.getElementById("targetTime").innerHTML = `Akhcham time <span>${targetTimeDisplay}</span>`;
+
+      const distance = targetDate - now;
+      const hours = Math.floor(distance / 3600000).toString().padStart(2, '0');
+      const minutes = Math.floor((distance % 3600000) / 60000).toString().padStart(2, '0');
+      const seconds = Math.floor((distance % 60000) / 1000).toString().padStart(2, '0');
+
+      document.getElementById("countdown").textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Ramadan days progress (static, updates once per day)
+    function updateRamadanDays() {
+      const RAMADAN_START = new Date(2026, 1, 18); // Feb 18, 2026
+      const EID_DATE      = new Date(2026, 2, 20); // Mar 20, 2026 (day after last fast Mar 19)
+      const TOTAL_DAYS    = 30;
+
+      const now  = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      const msPerDay = 24 * 60 * 60 * 1000;
+
+      // Days elapsed since Ramadan started (0 on day 1, 1 on day 2, etc.)
+      const elapsed = Math.floor((today - RAMADAN_START) / msPerDay);
+      // Days fasted = days fully completed (after maghrib counts as +1, but we keep it simple: day number = elapsed+1)
+      const daysFasted  = Math.min(TOTAL_DAYS, Math.max(1, elapsed + 1));
+      const daysToEid   = Math.max(0, Math.ceil((EID_DATE - today) / msPerDay));
+      const progressPct = Math.min(100, (elapsed / TOTAL_DAYS) * 100);
+
+      document.getElementById('daysFasted').textContent   = daysFasted;
+      document.getElementById('daysToEid').textContent    = daysToEid;
+      document.getElementById('daysProgressFill').style.width = progressPct + '%';
+
+      // Build tick dots (one per 5 days = 6 ticks for 30 days)
+      const ticksEl = document.getElementById('daysTicks');
+      if (!ticksEl.childElementCount) {
+        for (let i = 0; i <= TOTAL_DAYS; i += 5) {
+          const dot = document.createElement('div');
+          dot.className = 'days-tick' + (elapsed >= i ? ' filled' : '');
+          ticksEl.appendChild(dot);
+        }
+      }
+    }
+
+    updateRamadanDays();
+    // Refresh once per minute is enough
+    setInterval(updateRamadanDays, 60000);
+  </script>
+</body>
+</html>
