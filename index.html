@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Ramadan 2026 Countdown</title>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230D1117'/><text y='.9em' font-size='80' x='10'>🌙</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🌙</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
@@ -79,12 +81,12 @@
       z-index: 1;
       width: 100%;
       max-width: 420px;
-      padding: 1.2rem 1.2rem 2rem;
+      padding: 2rem 1.5rem;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.9rem;
+      gap: 1.2rem;
     }
 
     /* Header */
@@ -138,17 +140,18 @@
       letter-spacing: 0.4em;
     }
 
-    /* Status pill */
-    .status-pill {
-      background: linear-gradient(135deg, rgba(26,107,92,0.3), rgba(26,107,92,0.1));
-      border: 1px solid rgba(26,107,92,0.5);
-      border-radius: 100px;
-      padding: 0.4rem 1.4rem;
-      font-size: clamp(0.8rem, 3.2vw, 0.95rem);
-      color: #5ECFB8;
-      letter-spacing: 0.05em;
-      font-weight: 400;
-      transition: all 0.5s ease;
+
+    /* Countdown label */
+    .countdown-label {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold) 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.85;
     }
 
     /* Countdown block */
@@ -161,7 +164,7 @@
     }
     .countdown {
       font-family: 'Amiri', serif;
-      font-size: clamp(3.8rem, 16vw, 6rem);
+      font-size: clamp(4.5rem, 18vw, 6.5rem);
       font-weight: 700;
       letter-spacing: 0.04em;
       line-height: 1;
@@ -221,13 +224,16 @@
       border-radius: 100px;
       transition: width 1s linear;
     }
-    .progress-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-      color: rgba(245,236,215,0.3);
+    .progress-pct-label {
+      text-align: center;
+      font-size: clamp(0.7rem, 2.8vw, 0.82rem);
+      color: rgba(245,236,215,0.45);
+      letter-spacing: 0.08em;
     }
-    .progress-labels span:last-child { color: var(--gold); opacity: 0.7; }
+    .progress-pct-label span {
+      color: var(--gold-light);
+      font-weight: 700;
+    }
 
     /* Both times row */
     .times-row {
@@ -350,7 +356,7 @@
 
   <div class="container">
     <div class="header">
-      <div class="ramadan-title">رمضان ٢٠٢٦</div>
+      <div class="ramadan-title">رمضان ١٤٤٧</div>
       <div class="ramadan-subtitle">Ramadan 2026</div>
     </div>
 
@@ -361,9 +367,9 @@
 
     <div class="ornament">✦ ✦ ✦</div>
 
-    <div class="status-pill" id="statusPill">Loading...</div>
 
     <div class="countdown-wrap">
+      <div class="countdown-label" id="countdownLabel">--</div>
       <div class="countdown" id="countdown">--:--:--</div>
       <div class="time-labels">
         <div class="time-label">Hours</div>
@@ -372,16 +378,12 @@
       </div>
     </div>
 
-    <div class="target-time" id="targetTime"></div>
 
     <div class="progress-section">
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
       </div>
-      <div class="progress-labels">
-        <span id="progressStart">Fajr</span>
-        <span id="progressEnd">Maghrib</span>
-      </div>
+      <div class="progress-pct-label" id="progressPctLabel"></div>
     </div>
 
     <div class="times-row">
@@ -512,8 +514,7 @@
         const totalMs = fajrDate - midnight;
         const elapsedMs = now - midnight;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressStart').textContent = 'Midnight';
-        document.getElementById('progressEnd').textContent = 'Fajr';
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of pre-Fajr period elapsed`;
         document.getElementById('boxFajr').classList.add('active');
         document.getElementById('boxMaghrib').classList.remove('active');
       } else if (now < maghribDate) {
@@ -524,8 +525,7 @@
         const totalMs = maghribDate - fajrDate;
         const elapsedMs = now - fajrDate;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressStart').textContent = 'Fajr';
-        document.getElementById('progressEnd').textContent = 'Maghrib';
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> fast of the day completed`;
         document.getElementById('boxFajr').classList.remove('active');
         document.getElementById('boxMaghrib').classList.add('active');
       } else {
@@ -549,8 +549,7 @@
         const totalMs = targetDate - maghribDate;
         const elapsedMs = now - maghribDate;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressStart').textContent = 'Maghrib';
-        document.getElementById('progressEnd').textContent = 'Fajr';
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of night elapsed`;
         document.getElementById('boxFajr').classList.remove('active');
         document.getElementById('boxMaghrib').classList.remove('active');
       }
@@ -562,8 +561,7 @@
       const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       document.getElementById("dayName").textContent = dayNames[now.getDay()];
       document.getElementById("dateDisplay").textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
-      document.getElementById("statusPill").textContent = label;
-      document.getElementById("targetTime").innerHTML = `Akhcham time <span>${targetTimeDisplay}</span>`;
+      document.getElementById("countdownLabel").textContent = label;
 
       const distance = targetDate - now;
       const hours = Math.floor(distance / 3600000).toString().padStart(2, '0');
