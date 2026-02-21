@@ -118,7 +118,7 @@
     }
     .ramadan-title {
       font-family: 'Amiri', serif;
-      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-size: clamp(2.6rem, 10vw, 3.6rem);
       color: var(--gold-light);
       letter-spacing: 0.05em;
       line-height: 1;
@@ -525,19 +525,31 @@
         label = "Until Fast Begins · Fajr";
         targetTimeDisplay = todayTimes.fajr;
         isFasting = false;
-        // Progress from midnight to fajr
-        const midnight = new Date(2026, targetMonth, targetDay, 0, 0, 0);
-        const totalMs = fajrDate - midnight;
-        const elapsedMs = now - midnight;
+        // Progress from PREVIOUS maghrib to today's fajr — continuous with the after-maghrib bar
+        let prevMaghribDate;
+        if (targetDay === 18 && targetMonth === 1) {
+          // First day of Ramadan — use midnight as start
+          prevMaghribDate = new Date(2026, targetMonth, targetDay, 0, 0, 0);
+        } else {
+          let prevDay = targetDay - 1;
+          let prevMonth = targetMonth;
+          if (prevDay < 1) { prevMonth = 1; prevDay = 28; }
+          const prevTimes = ramadanTimes[prevMonth] && ramadanTimes[prevMonth][prevDay];
+          if (prevTimes) {
+            prevMaghribDate = new Date(2026, prevMonth, prevDay, ...prevTimes.maghrib.split(":"));
+          } else {
+            prevMaghribDate = new Date(2026, targetMonth, targetDay, 0, 0, 0);
+          }
+        }
+        const totalMs = fajrDate - prevMaghribDate;
+        const elapsedMs = now - prevMaghribDate;
         progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of pre-Fajr period elapsed`;
-        // Before fajr: left=Maghrib(last), right=Fajr(upcoming active)
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of Iftar elapsed`;
+        // Before fajr: left=Maghrib(last), right=Fajr(upcoming)
         document.getElementById('labelLeft').textContent = '🕌 Maghrib';
         document.getElementById('valLeft').textContent = todayTimes.maghrib;
         document.getElementById('labelRight').textContent = '🌙 Fajr';
         document.getElementById('valRight').textContent = todayTimes.fajr;
-        document.getElementById('boxLeft').classList.remove('active');
-        document.getElementById('boxRight').classList.add('active');
       } else if (now < maghribDate) {
         targetDate = maghribDate;
         label = "Fasting time · Until Iftar";
@@ -552,8 +564,6 @@
         document.getElementById('valLeft').textContent = todayTimes.fajr;
         document.getElementById('labelRight').textContent = '🕌 Maghrib';
         document.getElementById('valRight').textContent = todayTimes.maghrib;
-        document.getElementById('boxLeft').classList.remove('active');
-        document.getElementById('boxRight').classList.add('active');
       } else {
         let nextDay = targetDay + 1;
         let nextMonth = targetMonth;
@@ -581,8 +591,6 @@
         document.getElementById('valLeft').textContent = todayTimes.maghrib;
         document.getElementById('labelRight').textContent = '🌙 Fajr';
         document.getElementById('valRight').textContent = tomorrowTimes.fajr;
-        document.getElementById('boxLeft').classList.remove('active');
-        document.getElementById('boxRight').classList.add('active');
       }
 
       // Update progress bar
