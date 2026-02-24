@@ -369,41 +369,40 @@
     }
 
     /* ── Pull-up table drawer ── */
-    .pull-hint {
+    .schedule-btn {
       position: fixed;
-      bottom: 2.2rem;
+      bottom: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
       z-index: 50;
+      background: rgba(201,169,110,0.12);
+      border: 1px solid rgba(201,169,110,0.35);
+      border-radius: 100px;
+      padding: 0.55rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
     }
-    .pull-hint-text {
-      font-size: 0.6rem;
-      letter-spacing: 0.25em;
+    .schedule-btn:active {
+      transform: translateX(-50%) scale(0.95);
+      background: rgba(201,169,110,0.2);
+    }
+    .schedule-btn-icon {
+      font-size: 0.8rem;
+    }
+    .schedule-btn-text {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(201,169,110,0.5);
-    }
-    .pull-arrow {
-      width: 18px;
-      height: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-    .pull-arrow svg {
-      position: absolute;
-      top: 0; left: 0;
-      animation: arrowGlow 1.6s ease-in-out infinite;
-    }
-    @keyframes arrowGlow {
-      0%   { opacity: 0; transform: translateY(10px); }
-      40%  { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-4px); }
+      color: rgba(201,169,110,0.8);
     }
 
     .table-drawer {
@@ -562,7 +561,7 @@
       <div class="days-ticks" id="daysTicks"></div>
     </div>
 
-    <div class="footer-credit"><br><br><br><br>Created and Designed by<br>Ayman Lauz</div>
+    <div class="footer-credit"><br><br>Created and Designed by<br>Ayman Lauz</div>
 
   </div>
 
@@ -867,41 +866,40 @@
     #cookie-decline:hover { background: rgba(201,169,110,0.08); }
 
     /* ── Pull-up table drawer ── */
-    .pull-hint {
+    .schedule-btn {
       position: fixed;
-      bottom: 2.2rem;
+      bottom: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
       z-index: 50;
+      background: rgba(201,169,110,0.12);
+      border: 1px solid rgba(201,169,110,0.35);
+      border-radius: 100px;
+      padding: 0.55rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
     }
-    .pull-hint-text {
-      font-size: 0.6rem;
-      letter-spacing: 0.25em;
+    .schedule-btn:active {
+      transform: translateX(-50%) scale(0.95);
+      background: rgba(201,169,110,0.2);
+    }
+    .schedule-btn-icon {
+      font-size: 0.8rem;
+    }
+    .schedule-btn-text {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(201,169,110,0.5);
-    }
-    .pull-arrow {
-      width: 18px;
-      height: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-    .pull-arrow svg {
-      position: absolute;
-      top: 0; left: 0;
-      animation: arrowGlow 1.6s ease-in-out infinite;
-    }
-    @keyframes arrowGlow {
-      0%   { opacity: 0; transform: translateY(10px); }
-      40%  { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-4px); }
+      color: rgba(201,169,110,0.8);
     }
 
     .table-drawer {
@@ -1019,20 +1017,9 @@
     })();
   </script>
   <!-- Pull hint -->
-  <div class="pull-hint" id="pullHint">
-    <div class="pull-hint-text">Schedule</div>
-    <div class="pull-arrow">
-      <svg width="18" height="26" viewBox="0 0 18 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="ag" x1="9" y1="26" x2="9" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#C9A96E" stop-opacity="0"/>
-            <stop offset="50%" stop-color="#E8C97A" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path d="M9 24L9 4M9 4L3 11M9 4L15 11" stroke="url(#ag)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+  <div class="schedule-btn" id="scheduleBtn">
+    <span class="schedule-btn-icon">📋</span>
+    <span class="schedule-btn-text">Schedule</span>
   </div>
 
   <!-- Overlay -->
@@ -1076,7 +1063,7 @@
       {day:13,month:2,fajr:"04:31",maghrib:"17:51"},{day:14,month:2,fajr:"04:30",maghrib:"17:52"},
       {day:15,month:2,fajr:"04:28",maghrib:"17:53"},{day:16,month:2,fajr:"04:27",maghrib:"17:53"},
       {day:17,month:2,fajr:"04:26",maghrib:"17:54"},{day:18,month:2,fajr:"04:24",maghrib:"17:55"},
-      {day:19,month:2,fajr:"04:23",maghrib:"17:55"}
+      {day:19,month:2,fajr:"04:23",maghrib:"17:55"},{day:20,month:2,fajr:"04:22",maghrib:"17:56"}
     ];
     const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     const monthNames = ["","Feb","Mar"];
@@ -1098,80 +1085,27 @@
     // ── Drawer logic ──
     const drawer = document.getElementById('tableDrawer');
     const overlay = document.getElementById('drawerOverlay');
-    const hint = document.getElementById('pullHint');
-    const handle = document.getElementById('drawerHandle');
+    const btn = document.getElementById('scheduleBtn');
     let isOpen = false;
 
     function openDrawer() {
       isOpen = true;
       drawer.classList.add('open');
       overlay.classList.add('visible');
-      hint.style.opacity = '0';
-      hint.style.pointerEvents = 'none';
-      // Scroll today into view
+      btn.style.opacity = '0';
+      btn.style.pointerEvents = 'none';
       if (todayRowEl) setTimeout(() => todayRowEl.scrollIntoView({block:'center',behavior:'smooth'}), 350);
     }
     function closeDrawer() {
       isOpen = false;
       drawer.classList.remove('open');
       overlay.classList.remove('visible');
-      hint.style.opacity = '1';
-      hint.style.pointerEvents = 'all';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'all';
     }
 
-    hint.addEventListener('click', openDrawer);
+    btn.addEventListener('click', openDrawer);
     overlay.addEventListener('click', closeDrawer);
-
-    // ── Touch drag for pull-up and pull-down ──
-    let dragStartY = 0, dragStartOpen = false, dragging = false;
-    const THRESHOLD = 80; // px to commit open/close
-
-    function onTouchStart(e) {
-      dragStartY = e.touches[0].clientY;
-      dragStartOpen = isOpen;
-      dragging = true;
-      drawer.style.transition = 'none';
-    }
-    function onTouchMove(e) {
-      if (!dragging) return;
-      const dy = e.touches[0].clientY - dragStartY;
-      if (!dragStartOpen) {
-        // Pulling up from closed: resistance until threshold
-        if (dy < 0) {
-          const resistance = Math.min(Math.abs(dy), THRESHOLD * 2);
-          const eased = resistance < THRESHOLD ? resistance * 0.3 : THRESHOLD * 0.3 + (resistance - THRESHOLD) * 1.2;
-          drawer.style.transform = `translateY(calc(100% - ${Math.min(eased, window.innerHeight * 0.85)}px))`;
-        }
-      } else {
-        // Pulling down from open: resistance at top
-        if (dy > 0) {
-          const eased = dy < THRESHOLD ? dy * 0.3 : THRESHOLD * 0.3 + (dy - THRESHOLD) * 1.2;
-          drawer.style.transform = `translateY(${Math.min(eased, window.innerHeight * 0.85)}px)`;
-        }
-      }
-    }
-    function onTouchEnd(e) {
-      if (!dragging) return;
-      dragging = false;
-      drawer.style.transition = '';
-      const dy = e.changedTouches[0].clientY - dragStartY;
-      if (!dragStartOpen && dy < -THRESHOLD) {
-        openDrawer();
-      } else if (dragStartOpen && dy > THRESHOLD) {
-        closeDrawer();
-      } else {
-        // Snap back
-        drawer.style.transform = dragStartOpen ? '' : 'translateY(100%)';
-        if (dragStartOpen) drawer.classList.add('open');
-      }
-    }
-
-    // Attach to both the hint and drawer handle for drag
-    [hint, handle, drawer].forEach(el => {
-      el.addEventListener('touchstart', onTouchStart, {passive:true});
-      el.addEventListener('touchmove', onTouchMove, {passive:true});
-      el.addEventListener('touchend', onTouchEnd, {passive:true});
-    });
   </script>
 
 </body>
