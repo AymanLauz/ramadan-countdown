@@ -118,7 +118,7 @@
     }
     .ramadan-title {
       font-family: 'Amiri', serif;
-      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-size: clamp(2.6rem, 10vw, 3.4rem);
       color: var(--gold-light);
       letter-spacing: 0.05em;
       line-height: 1;
@@ -369,40 +369,41 @@
     }
 
     /* ── Pull-up table drawer ── */
-    .schedule-btn {
+    .pull-hint {
       position: fixed;
-      bottom: 2.5rem;
+      bottom: 2.2rem;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 50;
-      background: rgba(201,169,110,0.12);
-      border: 1px solid rgba(201,169,110,0.35);
-      border-radius: 100px;
-      padding: 0.55rem 1.4rem;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.15rem;
+      z-index: 50;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
-      white-space: nowrap;
     }
-    .schedule-btn:active {
-      transform: translateX(-50%) scale(0.95);
-      background: rgba(201,169,110,0.2);
-    }
-    .schedule-btn-icon {
-      font-size: 0.8rem;
-    }
-    .schedule-btn-text {
-      font-family: 'Tajawal', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
+    .pull-hint-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: rgba(201,169,110,0.8);
+      color: rgba(201,169,110,0.5);
+    }
+    .pull-arrow {
+      width: 18px;
+      height: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pull-arrow svg {
+      position: absolute;
+      top: 0; left: 0;
+      animation: arrowGlow 1.6s ease-in-out infinite;
+    }
+    @keyframes arrowGlow {
+      0%   { opacity: 0; transform: translateY(10px); }
+      40%  { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-4px); }
     }
 
     .table-drawer {
@@ -495,6 +496,31 @@
       opacity: 1;
       pointer-events: all;
     }
+    .schedule-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(201,169,110,0.1);
+      border: 1px solid rgba(201,169,110,0.35);
+      border-radius: 100px;
+      padding: 0.7rem 1.6rem;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background 0.2s, transform 0.15s;
+      margin: 0.2rem auto 0;
+      width: fit-content;
+    }
+    .schedule-btn:active { transform: scale(0.95); background: rgba(201,169,110,0.2); }
+    .schedule-btn-text {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(201,169,110,0.8);
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -561,7 +587,11 @@
       <div class="days-ticks" id="daysTicks"></div>
     </div>
 
-    <div class="footer-credit"><br>Created and Designed by<br>Ayman Lauz</div>
+    <div class="schedule-btn" id="scheduleBtn">
+      <span class="schedule-btn-text">📋 Full Month Schedule</span>
+    </div>
+
+    <div class="footer-credit"><br><br>Created and Designed by<br>Ayman Lauz</div>
 
   </div>
 
@@ -688,8 +718,9 @@
         isFasting = true;
         const totalMs = maghribDate - fajrDate;
         const elapsedMs = now - fajrDate;
-        progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of fast completed`;
+        const rawPct = (elapsedMs / totalMs) * 100;
+        progressPct = rawPct >= 100 ? 100 : Math.min(99.9, Math.max(0, rawPct));
+        document.getElementById('progressPctLabel').innerHTML = `<span>${Math.floor(progressPct)}%</span> of fast completed`;
         // Fasting: left=Fajr(started), right=Maghrib(ends active)
         document.getElementById('labelLeft').textContent = 'Fajr';
         document.getElementById('valLeft').textContent = todayTimes.fajr;
@@ -866,40 +897,41 @@
     #cookie-decline:hover { background: rgba(201,169,110,0.08); }
 
     /* ── Pull-up table drawer ── */
-    .schedule-btn {
+    .pull-hint {
       position: fixed;
-      bottom: 2.5rem;
+      bottom: 2.2rem;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 50;
-      background: rgba(201,169,110,0.12);
-      border: 1px solid rgba(201,169,110,0.35);
-      border-radius: 100px;
-      padding: 0.55rem 1.4rem;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.15rem;
+      z-index: 50;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
-      white-space: nowrap;
     }
-    .schedule-btn:active {
-      transform: translateX(-50%) scale(0.95);
-      background: rgba(201,169,110,0.2);
-    }
-    .schedule-btn-icon {
-      font-size: 0.8rem;
-    }
-    .schedule-btn-text {
-      font-family: 'Tajawal', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
+    .pull-hint-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: rgba(201,169,110,0.8);
+      color: rgba(201,169,110,0.5);
+    }
+    .pull-arrow {
+      width: 18px;
+      height: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pull-arrow svg {
+      position: absolute;
+      top: 0; left: 0;
+      animation: arrowGlow 1.6s ease-in-out infinite;
+    }
+    @keyframes arrowGlow {
+      0%   { opacity: 0; transform: translateY(10px); }
+      40%  { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-4px); }
     }
 
     .table-drawer {
@@ -1016,10 +1048,7 @@
       };
     })();
   </script>
-  <!-- Pull hint -->
-  <div class="schedule-btn" id="scheduleBtn">
-    <span class="schedule-btn-text">Full Month Schedule</span>
-  </div>
+
 
   <!-- Overlay -->
   <div class="drawer-overlay" id="drawerOverlay"></div>
@@ -1027,7 +1056,7 @@
   <!-- Drawer -->
   <div class="table-drawer" id="tableDrawer">
     <div class="drawer-handle-bar" id="drawerHandle"></div>
-    <div class="drawer-title">رمضان ١٤٤٧ — Full Schedule</div>
+    <div class="drawer-title">Full Schedule</div>
     <div class="drawer-scroll">
       <table class="ramadan-table" id="ramadanTable">
         <thead>
@@ -1062,7 +1091,7 @@
       {day:13,month:2,fajr:"04:31",maghrib:"17:51"},{day:14,month:2,fajr:"04:30",maghrib:"17:52"},
       {day:15,month:2,fajr:"04:28",maghrib:"17:53"},{day:16,month:2,fajr:"04:27",maghrib:"17:53"},
       {day:17,month:2,fajr:"04:26",maghrib:"17:54"},{day:18,month:2,fajr:"04:24",maghrib:"17:55"},
-      {day:19,month:2,fajr:"04:23",maghrib:"17:55"},{day:20,month:2,fajr:"04:22",maghrib:"17:56"}
+      {day:19,month:2,fajr:"04:23",maghrib:"17:55"}
     ];
     const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     const monthNames = ["","Feb","Mar"];
@@ -1091,22 +1120,19 @@
       isOpen = true;
       drawer.classList.add('open');
       overlay.classList.add('visible');
-      btn.style.opacity = '0';
-      btn.style.pointerEvents = 'none';
       if (todayRowEl) setTimeout(() => todayRowEl.scrollIntoView({block:'center',behavior:'smooth'}), 350);
     }
     function closeDrawer() {
       isOpen = false;
       drawer.classList.remove('open');
       overlay.classList.remove('visible');
-      btn.style.opacity = '1';
-      btn.style.pointerEvents = 'all';
     }
 
     btn.addEventListener('click', openDrawer);
     overlay.addEventListener('click', closeDrawer);
+
+
   </script>
 
 </body>
 </html>
-
