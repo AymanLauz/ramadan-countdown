@@ -56,7 +56,7 @@
       content: '';
       position: fixed;
       inset: 0;
-      background: 
+      background:
         radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,107,92,0.15) 0%, transparent 60%),
         radial-gradient(ellipse 60% 40% at 50% 100%, rgba(201,169,110,0.08) 0%, transparent 60%);
       pointer-events: none;
@@ -529,7 +529,7 @@
 
   <div class="table-drawer" id="tableDrawer">
     <div class="drawer-handle-bar" id="drawerHandle"></div>
-    <div class="drawer-title">Full Schedule</div>
+    <div class="drawer-title">Full Month Schedule</div>
     <div class="drawer-scroll">
       <table class="ramadan-table" id="ramadanTable">
         <thead>
@@ -693,7 +693,7 @@
         maghribPassedToday = now >= new Date(now.getFullYear(), now.getMonth(), now.getDate(), mh, mm);
       }
       const fasted = Math.min(TOTAL_DAYS, Math.max(1, elapsed + (maghribPassedToday ? 1 : 0)));
-      const toEid = Math.max(0, Math.ceil((EID_DATE - today) / 86400000));
+      const toEid = Math.max(0, Math.ceil((EID_DATE - today) / 86400000) - (maghribPassedToday ? 1 : 0));
       document.getElementById('daysFasted').textContent = fasted;
       document.getElementById('daysToEid').textContent = toEid;
       document.getElementById('daysProgressFill').style.width = Math.min(100, (elapsed / TOTAL_DAYS) * 100) + '%';
@@ -710,11 +710,16 @@
     setInterval(updateRamadanDays, 60000);
 
     const allDays = [
-      {day:18,month:1,fajr:"04:57",maghrib:"17:33"},{day:19,month:1,fajr:"04:56",maghrib:"17:34"},
-      {day:20,month:1,fajr:"04:55",maghrib:"17:35"},{day:21,month:1,fajr:"04:54",maghrib:"17:36"},
-      {day:22,month:1,fajr:"04:53",maghrib:"17:36"},{day:23,month:1,fajr:"04:52",maghrib:"17:37"},
-      {day:24,month:1,fajr:"04:51",maghrib:"17:38"},{day:25,month:1,fajr:"04:50",maghrib:"17:39"},
-      {day:26,month:1,fajr:"04:49",maghrib:"17:40"},{day:27,month:1,fajr:"04:48",maghrib:"17:40"},
+      {day:18,month:1,fajr:"04:57",maghrib:"17:33"},
+      {day:19,month:1,fajr:"04:56",maghrib:"17:34"},
+      {day:20,month:1,fajr:"04:55",maghrib:"17:35"},
+      {day:21,month:1,fajr:"04:54",maghrib:"17:36"},
+      {day:22,month:1,fajr:"04:53",maghrib:"17:36"},
+      {day:23,month:1,fajr:"04:52",maghrib:"17:37"},
+      {day:24,month:1,fajr:"04:51",maghrib:"17:38"},
+      {day:25,month:1,fajr:"04:50",maghrib:"17:39"},
+      {day:26,month:1,fajr:"04:49",maghrib:"17:40"},
+      {day:27,month:1,fajr:"04:48",maghrib:"17:40"},
       {day:28,month:1,fajr:"04:46",maghrib:"17:41"},
       {day:1, month:2, fajr:"04:44", maghrib:"17:43"},
       {day:2, month:2, fajr:"04:43", maghrib:"17:44"},
