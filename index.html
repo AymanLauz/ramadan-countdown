@@ -7,17 +7,14 @@
   <link rel="apple-touch-icon" id="apple-touch-icon" href="">
   <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🌙</text></svg>">
   <script>
-    // Generate a real PNG for apple-touch-icon (Safari requires actual PNG, not SVG data URI)
     (function() {
       var canvas = document.createElement('canvas');
       canvas.width = 180; canvas.height = 180;
       var ctx = canvas.getContext('2d');
-      // Dark background
       ctx.fillStyle = '#0D1117';
       ctx.beginPath();
       ctx.roundRect(0, 0, 180, 180, 36);
       ctx.fill();
-      // Moon emoji
       ctx.font = '120px serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -55,7 +52,6 @@
       position: relative;
     }
 
-    /* Subtle geometric background */
     body::before {
       content: '';
       position: fixed;
@@ -66,7 +62,6 @@
       pointer-events: none;
     }
 
-    /* Crescent moon decoration */
     .moon {
       position: fixed;
       top: -40px;
@@ -79,7 +74,6 @@
       pointer-events: none;
     }
 
-    /* Stars */
     .stars {
       position: fixed;
       inset: 0;
@@ -109,7 +103,6 @@
       gap: 1.2rem;
     }
 
-    /* Header */
     .header {
       display: flex;
       flex-direction: column;
@@ -130,7 +123,6 @@
       text-transform: uppercase;
     }
 
-    /* Date card */
     .date-card {
       display: flex;
       flex-direction: column;
@@ -149,7 +141,6 @@
       letter-spacing: 0.08em;
     }
 
-    /* Divider */
     .ornament {
       color: var(--gold);
       font-size: 1.1rem;
@@ -157,8 +148,6 @@
       letter-spacing: 0.4em;
     }
 
-
-    /* Countdown label */
     .countdown-label {
       font-family: 'Amiri', serif;
       font-size: clamp(1rem, 4vw, 1.3rem);
@@ -171,7 +160,6 @@
       opacity: 0.85;
     }
 
-    /* Countdown block */
     .countdown-wrap {
       display: flex;
       flex-direction: column;
@@ -189,7 +177,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      /* Subtle pulse */
       animation: pulse 1s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -211,25 +198,12 @@
       text-align: center;
     }
 
-    /* Target time */
-    .target-time {
-      font-size: clamp(0.8rem, 3vw, 0.9rem);
-      color: rgba(245,236,215,0.4);
-    }
-    .target-time span {
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    /* Progress bar integrated with times */
     .progress-section {
       width: 100%;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
     }
-
-
 
     .progress-outer {
       display: flex;
@@ -243,7 +217,7 @@
       width: 100%;
       margin-top: 0.05rem;
     }
-        .progress-time-value {
+    .progress-time-value {
       font-family: 'Amiri', serif;
       font-size: clamp(1rem, 4vw, 1.2rem);
       font-weight: 700;
@@ -281,9 +255,6 @@
       font-weight: 700;
     }
 
-    /* times now integrated into progress bar row */
-
-    /* Ramadan days section */
     .ramadan-days-section {
       width: 100%;
       background: rgba(255,255,255,0.03);
@@ -366,44 +337,6 @@
       text-align: center;
       letter-spacing: 0.1em;
       padding: 1.5rem 0 1rem;
-    }
-
-    /* ── Pull-up table drawer ── */
-    .pull-hint {
-      position: fixed;
-      bottom: 2.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
-      z-index: 50;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    .pull-hint-text {
-      font-size: 0.6rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: rgba(201,169,110,0.5);
-    }
-    .pull-arrow {
-      width: 18px;
-      height: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-    .pull-arrow svg {
-      position: absolute;
-      top: 0; left: 0;
-      animation: arrowGlow 1.6s ease-in-out infinite;
-    }
-    @keyframes arrowGlow {
-      0%   { opacity: 0; transform: translateY(10px); }
-      40%  { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-4px); }
     }
 
     .table-drawer {
@@ -541,7 +474,6 @@
 
     <div class="ornament">✦ ✦ ✦</div>
 
-
     <div class="countdown-wrap">
       <div class="countdown-label" id="countdownLabel">--</div>
       <div class="countdown" id="countdown">--:--:--</div>
@@ -551,7 +483,6 @@
         <div class="time-label">Secs</div>
       </div>
     </div>
-
 
     <div class="progress-section">
       <div class="progress-outer">
@@ -592,11 +523,30 @@
     </div>
 
     <div class="footer-credit"><br><br>Created and Designed by<br>Ayman Lauz</div>
+  </div>
 
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <div class="table-drawer" id="tableDrawer">
+    <div class="drawer-handle-bar" id="drawerHandle"></div>
+    <div class="drawer-title">Full Schedule</div>
+    <div class="drawer-scroll">
+      <table class="ramadan-table" id="ramadanTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Fajr</th>
+            <th>Maghrib</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <script>
-    // Generate stars
     const starsEl = document.getElementById('stars');
     for (let i = 0; i < 30; i++) {
       const s = document.createElement('div');
@@ -650,20 +600,14 @@
       }
     };
 
-    function toMinutes(timeStr) {
-      const [h, m] = timeStr.split(':').map(Number);
-      return h * 60 + m;
-    }
-
     function updateCountdown() {
       const now = new Date();
-      const year = now.getFullYear();
       const month = now.getMonth();
       const day = now.getDate();
 
       let targetMonth = month;
       let targetDay = day;
-      if (year !== 2026 || !ramadanTimes[month] || !ramadanTimes[month][day]) {
+      if (now.getFullYear() !== 2026 || !ramadanTimes[month] || !ramadanTimes[month][day]) {
         targetMonth = 1;
         targetDay = 18;
       }
@@ -672,144 +616,87 @@
       const fajrDate = new Date(2026, targetMonth, targetDay, ...todayTimes.fajr.split(":"));
       const maghribDate = new Date(2026, targetMonth, targetDay, ...todayTimes.maghrib.split(":"));
 
-      // time boxes updated per-phase below
-
-      let targetDate, label, targetTimeDisplay, isFasting;
-      
-      // Progress bar logic
-      let progressPct = 0;
+      let targetDate, label, progressPct = 0;
 
       if (now < fajrDate) {
         targetDate = fajrDate;
         label = "Until Fast Begins · Fajr";
-        targetTimeDisplay = todayTimes.fajr;
-        isFasting = false;
-        // Progress from PREVIOUS day's Maghrib to today's Fajr — no reset at midnight
         let prevMaghribDate;
-        let prevMaghribTimeStr = todayTimes.maghrib; // fallback display
-        const isFirstDay = (targetMonth === 1 && targetDay === 18);
-        if (isFirstDay) {
+        let prevMaghribTimeStr = todayTimes.maghrib;
+        if (targetMonth === 1 && targetDay === 18) {
           prevMaghribDate = new Date(2026, targetMonth, targetDay - 1, ...todayTimes.fajr.split(":"));
         } else {
           let prevDay = targetDay - 1;
           let prevMonth = targetMonth;
           if (prevDay < 1) { prevMonth = 1; prevDay = 28; }
-          const prevTimes = ramadanTimes[prevMonth] && ramadanTimes[prevMonth][prevDay];
-          if (prevTimes) {
-            prevMaghribDate = new Date(2026, prevMonth, prevDay, ...prevTimes.maghrib.split(":"));
-            prevMaghribTimeStr = prevTimes.maghrib;
-          } else {
-            prevMaghribDate = new Date(2026, targetMonth, targetDay, 0, 0, 0);
-          }
+          const prevTimes = ramadanTimes[prevMonth][prevDay];
+          prevMaghribDate = new Date(2026, prevMonth, prevDay, ...prevTimes.maghrib.split(":"));
+          prevMaghribTimeStr = prevTimes.maghrib;
         }
-        const totalMs = fajrDate - prevMaghribDate;
-        const elapsedMs = now - prevMaghribDate;
-        progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of Fatar elapsed`;
-        // Before fajr: left=Maghrib(yesterday), right=Fajr(upcoming)
+        progressPct = Math.min(100, Math.max(0, ((now - prevMaghribDate) / (fajrDate - prevMaghribDate)) * 100));
         document.getElementById('labelLeft').textContent = 'Maghrib';
         document.getElementById('valLeft').textContent = prevMaghribTimeStr;
         document.getElementById('labelRight').textContent = 'Fajr';
         document.getElementById('valRight').textContent = todayTimes.fajr;
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of Fatar elapsed`;
       } else if (now < maghribDate) {
         targetDate = maghribDate;
         label = "Fasting time · Until Iftar";
-        targetTimeDisplay = todayTimes.maghrib;
-        isFasting = true;
-        const totalMs = maghribDate - fajrDate;
-        const elapsedMs = now - fajrDate;
-        const rawPct = (elapsedMs / totalMs) * 100;
-        progressPct = rawPct >= 100 ? 100 : Math.min(99.9, Math.max(0, rawPct));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${Math.floor(progressPct)}%</span> of fast completed`;
-        // Fasting: left=Fajr(started), right=Maghrib(ends active)
+        progressPct = Math.min(99.9, Math.max(0, ((now - fajrDate) / (maghribDate - fajrDate)) * 100));
         document.getElementById('labelLeft').textContent = 'Fajr';
         document.getElementById('valLeft').textContent = todayTimes.fajr;
         document.getElementById('labelRight').textContent = 'Maghrib';
         document.getElementById('valRight').textContent = todayTimes.maghrib;
+        document.getElementById('progressPctLabel').innerHTML = `<span>${Math.floor(progressPct)}%</span> of fast completed`;
       } else {
-        let nextDay = targetDay + 1;
-        let nextMonth = targetMonth;
-        if (!ramadanTimes[targetMonth][nextDay]) {
-          nextDay = 1;
-          nextMonth = targetMonth + 1;
-        }
+        let nextDay = targetDay + 1, nextMonth = targetMonth;
+        if (!ramadanTimes[targetMonth][nextDay]) { nextDay = 1; nextMonth = targetMonth + 1; }
         const tomorrowTimes = ramadanTimes[nextMonth] && ramadanTimes[nextMonth][nextDay];
         if (!tomorrowTimes) {
-          label = "Ramadan Complete 🌙";
-          targetTimeDisplay = "";
-          document.getElementById('countdown').textContent = "✓";
+          document.getElementById("countdownLabel").textContent = "Ramadan Complete 🌙";
+          document.getElementById("countdown").textContent = "✓";
           return;
         }
         targetDate = new Date(2026, nextMonth, nextDay, ...tomorrowTimes.fajr.split(":"));
         label = "Until Tomorrow's Fajr";
-        targetTimeDisplay = tomorrowTimes.fajr;
-        isFasting = false;
-        const totalMs = targetDate - maghribDate;
-        const elapsedMs = now - maghribDate;
-        progressPct = Math.min(100, Math.max(0, (elapsedMs / totalMs) * 100));
-        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of Fatar elapsed`;
-        // After maghrib: left=Maghrib(done), right=next Fajr(upcoming active)
+        progressPct = Math.min(100, Math.max(0, ((now - maghribDate) / (targetDate - maghribDate)) * 100));
         document.getElementById('labelLeft').textContent = 'Maghrib';
         document.getElementById('valLeft').textContent = todayTimes.maghrib;
         document.getElementById('labelRight').textContent = 'Fajr';
         document.getElementById('valRight').textContent = tomorrowTimes.fajr;
+        document.getElementById('progressPctLabel').innerHTML = `<span>${progressPct.toFixed(0)}%</span> of Fatar elapsed`;
       }
 
-      // Update progress bar
       document.getElementById('progressFill').style.width = progressPct + '%';
-
-      // Update date/day display
       const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       document.getElementById("dayName").textContent = dayNames[now.getDay()];
       document.getElementById("dateDisplay").textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
       document.getElementById("countdownLabel").textContent = label;
-
       const distance = targetDate - now;
-      const hours = Math.floor(distance / 3600000).toString().padStart(2, '0');
-      const minutes = Math.floor((distance % 3600000) / 60000).toString().padStart(2, '0');
-      const seconds = Math.floor((distance % 60000) / 1000).toString().padStart(2, '0');
-
-      document.getElementById("countdown").textContent = `${hours}:${minutes}:${seconds}`;
+      const h = Math.floor(distance / 3600000).toString().padStart(2, '0');
+      const m = Math.floor((distance % 3600000) / 60000).toString().padStart(2, '0');
+      const s = Math.floor((distance % 60000) / 1000).toString().padStart(2, '0');
+      document.getElementById("countdown").textContent = `${h}:${m}:${s}`;
     }
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Ramadan days progress (static, updates once per day)
     function updateRamadanDays() {
-      const RAMADAN_START = new Date(2026, 1, 18); // Feb 18, 2026
-      const EID_DATE      = new Date(2026, 2, 20); // Mar 20, 2026 (day after last fast Mar 19)
-      const TOTAL_DAYS    = 30;
-
-      const now  = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-      const msPerDay = 24 * 60 * 60 * 1000;
-
-      // Days elapsed since Ramadan started
-      const elapsed = Math.floor((today - RAMADAN_START) / msPerDay);
-      // Check if maghrib has passed today — if so, count today as fasted
-      const todayKey = now.getDate();
-      const todayMonth = now.getMonth();
-      const ramadanTimesRef = {
-        1: { 18:"17:33",19:"17:34",20:"17:35",21:"17:36",22:"17:36",23:"17:37",24:"17:38",25:"17:39",26:"17:40",27:"17:40",28:"17:41" },
-        2: { 1:"17:42",2:"17:43",3:"17:44",4:"17:44",5:"17:45",6:"17:46",7:"17:47",8:"17:47",9:"17:48",10:"17:49",11:"17:50",12:"17:50",13:"17:51",14:"17:52",15:"17:53",16:"17:53",17:"17:54",18:"17:55",19:"17:55",20:"17:56" }
-      };
+      const RAMADAN_START = new Date(2026, 1, 18), EID_DATE = new Date(2026, 2, 20), TOTAL_DAYS = 30;
+      const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const elapsed = Math.floor((today - RAMADAN_START) / 86400000);
+      const timesRef = ramadanTimes[now.getMonth()] && ramadanTimes[now.getMonth()][now.getDate()];
       let maghribPassedToday = false;
-      if (ramadanTimesRef[todayMonth] && ramadanTimesRef[todayMonth][todayKey]) {
-        const [mh, mm] = ramadanTimesRef[todayMonth][todayKey].split(':').map(Number);
-        const maghribToday = new Date(now.getFullYear(), todayMonth, todayKey, mh, mm, 0);
-        maghribPassedToday = now >= maghribToday;
+      if (timesRef) {
+        const [mh, mm] = timesRef.maghrib.split(':').map(Number);
+        maghribPassedToday = now >= new Date(now.getFullYear(), now.getMonth(), now.getDate(), mh, mm);
       }
-      const daysFasted  = Math.min(TOTAL_DAYS, Math.max(1, elapsed + (maghribPassedToday ? 1 : 0)));
-      const daysToEid   = Math.max(0, Math.ceil((EID_DATE - today) / msPerDay));
-      const progressPct = Math.min(100, (elapsed / TOTAL_DAYS) * 100);
-
-      document.getElementById('daysFasted').textContent   = daysFasted;
-      document.getElementById('daysToEid').textContent    = daysToEid;
-      document.getElementById('daysProgressFill').style.width = progressPct + '%';
-
-      // Build tick dots (one per 5 days = 6 ticks for 30 days)
+      const fasted = Math.min(TOTAL_DAYS, Math.max(1, elapsed + (maghribPassedToday ? 1 : 0)));
+      const toEid = Math.max(0, Math.ceil((EID_DATE - today) / 86400000));
+      document.getElementById('daysFasted').textContent = fasted;
+      document.getElementById('daysToEid').textContent = toEid;
+      document.getElementById('daysProgressFill').style.width = Math.min(100, (elapsed / TOTAL_DAYS) * 100) + '%';
       const ticksEl = document.getElementById('daysTicks');
       if (!ticksEl.childElementCount) {
         for (let i = 0; i <= TOTAL_DAYS; i += 5) {
@@ -819,262 +706,9 @@
         }
       }
     }
-
     updateRamadanDays();
-    // Refresh once per minute is enough
     setInterval(updateRamadanDays, 60000);
-  </script>
 
-  <!-- Cookie Consent Popup -->
-  <style>
-    #cookie-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 9999;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 1rem;
-      backdrop-filter: blur(4px);
-    }
-    #cookie-box {
-      background: #141B24;
-      border: 1px solid rgba(201,169,110,0.3);
-      border-radius: 16px;
-      padding: 1.5rem;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(201,169,110,0.1);
-      animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes slideUp {
-      from { transform: translateY(100px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    #cookie-box .cookie-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    #cookie-box h3 {
-      font-family: 'Amiri', serif;
-      color: #E8C97A;
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-    }
-    #cookie-box p {
-      font-size: 0.85rem;
-      color: rgba(245,236,215,0.6);
-      margin-bottom: 1.2rem;
-      line-height: 1.5;
-    }
-    .cookie-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-    #cookie-accept {
-      background: linear-gradient(135deg, #1A6B5C, #1d7a69);
-      color: #F5ECD7;
-      border: none;
-      border-radius: 10px;
-      padding: 0.7rem 1rem;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    #cookie-accept:hover { opacity: 0.85; }
-    #cookie-decline {
-      background: transparent;
-      color: #C9A96E;
-      border: 1px solid rgba(201,169,110,0.4);
-      border-radius: 10px;
-      padding: 0.7rem 1rem;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    #cookie-decline:hover { background: rgba(201,169,110,0.08); }
-
-    /* ── Pull-up table drawer ── */
-    .pull-hint {
-      position: fixed;
-      bottom: 2.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
-      z-index: 50;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-    .pull-hint-text {
-      font-size: 0.6rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: rgba(201,169,110,0.5);
-    }
-    .pull-arrow {
-      width: 18px;
-      height: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-    .pull-arrow svg {
-      position: absolute;
-      top: 0; left: 0;
-      animation: arrowGlow 1.6s ease-in-out infinite;
-    }
-    @keyframes arrowGlow {
-      0%   { opacity: 0; transform: translateY(10px); }
-      40%  { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-4px); }
-    }
-
-    .table-drawer {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: 85vh;
-      background: #0f1620;
-      border-top: 1px solid rgba(201,169,110,0.25);
-      border-radius: 20px 20px 0 0;
-      z-index: 100;
-      transform: translateY(100%);
-      transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-      display: flex;
-      flex-direction: column;
-      touch-action: none;
-    }
-    .table-drawer.open {
-      transform: translateY(0);
-    }
-    .drawer-handle-bar {
-      width: 36px; height: 4px;
-      background: rgba(201,169,110,0.3);
-      border-radius: 100px;
-      margin: 0.75rem auto 0;
-      flex-shrink: 0;
-    }
-    .drawer-title {
-      font-family: 'Amiri', serif;
-      font-size: 1.1rem;
-      color: var(--gold-light);
-      text-align: center;
-      padding: 0.5rem 0 0.75rem;
-      flex-shrink: 0;
-      letter-spacing: 0.05em;
-    }
-    .drawer-scroll {
-      flex: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 0.8rem 2rem;
-    }
-    .ramadan-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: 'Tajawal', sans-serif;
-      font-size: clamp(0.78rem, 3vw, 0.9rem);
-    }
-    .ramadan-table thead th {
-      padding: 0.5rem 0.4rem;
-      color: rgba(201,169,110,0.5);
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      text-align: center;
-    }
-    .ramadan-table tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: background 0.2s;
-    }
-    .ramadan-table tbody td {
-      padding: 0.55rem 0.4rem;
-      text-align: center;
-      color: var(--cream);
-    }
-    .ramadan-table tbody tr.past td {
-      color: rgba(245,236,215,0.2);
-    }
-    .ramadan-table tbody tr.today {
-      background: rgba(201,169,110,0.08);
-      border-radius: 8px;
-    }
-    .ramadan-table tbody tr.today td {
-      color: var(--gold-light);
-      font-weight: 700;
-    }
-    .ramadan-table tbody tr.today td:first-child {
-      border-left: 2px solid var(--gold);
-    }
-    .drawer-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 99;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s;
-    }
-    .drawer-overlay.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-  </style>
-
-  <div id="cookie-overlay" style="display:none;">
-    <div id="cookie-box">
-      <div class="cookie-icon">🍪</div>
-      <h3>Accept cookies?</h3>
-      <p>This site uses cookies to enhance your experience. Do you accept?</p>
-      <div class="cookie-btns">
-        <button id="cookie-decline">Not until Iftar ☝️</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-      if (!localStorage.getItem('cookieConsent')) {
-        document.getElementById('cookie-overlay').style.display = 'flex';
-      }
-      document.getElementById('cookie-decline').onclick = function() {
-        localStorage.setItem('cookieConsent', 'declined');
-        document.getElementById('cookie-overlay').style.display = 'none';
-      };
-    })();
-  </script>
-
-
-  <!-- Overlay -->
-  <div class="drawer-overlay" id="drawerOverlay"></div>
-
-  <!-- Drawer -->
-  <div class="table-drawer" id="tableDrawer">
-    <div class="drawer-handle-bar" id="drawerHandle"></div>
-    <div class="drawer-title">Full Schedule</div>
-    <div class="drawer-scroll">
-      <table class="ramadan-table" id="ramadanTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Day</th>
-            <th>Date</th>
-            <th>Fajr</th>
-            <th>Maghrib</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <script>
-    // ── Build table rows ──
     const allDays = [
       {day:18,month:1,fajr:"04:57",maghrib:"17:33"},{day:19,month:1,fajr:"04:56",maghrib:"17:34"},
       {day:20,month:1,fajr:"04:55",maghrib:"17:35"},{day:21,month:1,fajr:"04:54",maghrib:"17:36"},
@@ -1082,27 +716,33 @@
       {day:24,month:1,fajr:"04:51",maghrib:"17:38"},{day:25,month:1,fajr:"04:50",maghrib:"17:39"},
       {day:26,month:1,fajr:"04:49",maghrib:"17:40"},{day:27,month:1,fajr:"04:48",maghrib:"17:40"},
       {day:28,month:1,fajr:"04:46",maghrib:"17:41"},
-      {day:1,month:2,fajr:"04:46",maghrib:"17:42"},{day:2,month:2,fajr:"04:44",maghrib:"17:43"},
-      {day:3,month:2,fajr:"04:43",maghrib:"17:44"},{day:4,month:2,fajr:"04:42",maghrib:"17:44"},
-      {day:5,month:2,fajr:"04:41",maghrib:"17:45"},{day:6,month:2,fajr:"04:40",maghrib:"17:46"},
-      {day:7,month:2,fajr:"04:38",maghrib:"17:47"},{day:8,month:2,fajr:"04:37",maghrib:"17:47"},
-      {day:9,month:2,fajr:"04:36",maghrib:"17:48"},{day:10,month:2,fajr:"04:35",maghrib:"17:49"},
-      {day:11,month:2,fajr:"04:34",maghrib:"17:50"},{day:12,month:2,fajr:"04:32",maghrib:"17:50"},
-      {day:13,month:2,fajr:"04:31",maghrib:"17:51"},{day:14,month:2,fajr:"04:30",maghrib:"17:52"},
-      {day:15,month:2,fajr:"04:28",maghrib:"17:53"},{day:16,month:2,fajr:"04:27",maghrib:"17:53"},
-      {day:17,month:2,fajr:"04:26",maghrib:"17:54"},{day:18,month:2,fajr:"04:24",maghrib:"17:55"},
-      {day:19,month:2,fajr:"04:23",maghrib:"17:55"}
+      {day:1, month:2, fajr:"04:44", maghrib:"17:43"},
+      {day:2, month:2, fajr:"04:43", maghrib:"17:44"},
+      {day:3, month:2, fajr:"04:42", maghrib:"17:44"},
+      {day:4, month:2, fajr:"04:41", maghrib:"17:45"},
+      {day:5, month:2, fajr:"04:40", maghrib:"17:46"},
+      {day:6, month:2, fajr:"04:30", maghrib:"17:47"},
+      {day:7, month:2, fajr:"04:37", maghrib:"17:47"},
+      {day:8, month:2, fajr:"04:36", maghrib:"17:48"},
+      {day:9, month:2, fajr:"04:35", maghrib:"17:49"},
+      {day:10, month:2, fajr:"04:34", maghrib:"17:50"},
+      {day:11, month:2, fajr:"04:32", maghrib:"17:50"},
+      {day:12, month:2, fajr:"04:31", maghrib:"17:51"},
+      {day:13, month:2, fajr:"04:30", maghrib:"17:52"},
+      {day:14, month:2, fajr:"04:28", maghrib:"17:53"},
+      {day:15, month:2, fajr:"04:27", maghrib:"17:53"},
+      {day:16, month:2, fajr:"04:26", maghrib:"17:54"},
+      {day:17, month:2, fajr:"04:24", maghrib:"17:55"},
+      {day:18, month:2, fajr:"04:23", maghrib:"17:55"},
+      {day:19, month:2, fajr:"04:22", maghrib:"17:56"},
     ];
-    const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    const monthNames = ["","Feb","Mar"];
-    const tbody = document.getElementById('tableBody');
-    const now0 = new Date();
+    const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], monthNames = ["","Feb","Mar"];
+    const tbody = document.getElementById('tableBody'), now0 = new Date();
     let todayRowEl = null;
     allDays.forEach((d, i) => {
       const date = new Date(2026, d.month, d.day);
       const maghribDt = new Date(2026, d.month, d.day, ...d.maghrib.split(':').map(Number));
-      const isPast = now0 > maghribDt;
-      const isToday = (now0.getFullYear()===2026 && now0.getMonth()===d.month && now0.getDate()===d.day);
+      const isPast = now0 > maghribDt, isToday = (now0.getFullYear()===2026 && now0.getMonth()===d.month && now0.getDate()===d.day);
       const tr = document.createElement('tr');
       tr.className = isPast ? 'past' : (isToday ? 'today' : '');
       tr.innerHTML = `<td>${i+1}</td><td>${dayNames[date.getDay()]}</td><td>${d.day} ${monthNames[d.month]}</td><td>${d.fajr}</td><td>${d.maghrib}</td>`;
@@ -1110,31 +750,15 @@
       if (isToday) todayRowEl = tr;
     });
 
-    // ── Drawer logic ──
-    const drawer = document.getElementById('tableDrawer');
-    const overlay = document.getElementById('drawerOverlay');
-    const btn = document.getElementById('scheduleBtn');
-    let isOpen = false;
-
-    function openDrawer() {
-      isOpen = true;
-      drawer.classList.add('open');
-      overlay.classList.add('visible');
+    const drawer = document.getElementById('tableDrawer'), overlay = document.getElementById('drawerOverlay'), btn = document.getElementById('scheduleBtn');
+    function openDrawer() { 
+      drawer.classList.add('open'); overlay.classList.add('visible');
       if (todayRowEl) setTimeout(() => todayRowEl.scrollIntoView({block:'center',behavior:'smooth'}), 350);
     }
-    function closeDrawer() {
-      isOpen = false;
-      drawer.classList.remove('open');
-      overlay.classList.remove('visible');
-    }
-
+    function closeDrawer() { drawer.classList.remove('open'); overlay.classList.remove('visible'); }
     btn.addEventListener('click', openDrawer);
     overlay.addEventListener('click', closeDrawer);
-
-
+    document.getElementById('drawerHandle').addEventListener('click', closeDrawer);
   </script>
-
 </body>
 </html>
-
-
